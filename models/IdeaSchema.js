@@ -6,6 +6,9 @@ const IdeaSchema = new Schema({
     name: {
         type: String,
     },
+    userId: {
+        type:Number,
+    },
     description: {
         type: String,
     }
