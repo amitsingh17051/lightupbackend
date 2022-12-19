@@ -21,7 +21,6 @@ function verifyJWTToken(req, res, next) {
                 isLoggedIn: false,
                 msg: "Failed To Authenticate"
             })
-
             req.user = [];
             req.user.id = decode.id;
             req.user.name = decode.name;
@@ -116,7 +115,7 @@ router.get('/user',function(req,res){
 });
 
 router.post('/user/username', verifyJWTToken, function(req,res){
-   res.json({ isLoggedIn: true, name: req.user.name })
+   res.json({ isLoggedIn: true, name: req.user.name, id:  req.user.id})
 });
 
 
@@ -131,8 +130,6 @@ router.post('/user/login',function(req,res){
                 msg:"Invalid Username or Password 33"
             })
         }
-
-
         bcrypt.compare(dbUser.password, userLoggingIn.password)
         .then(isCorrect => {
             if(!isCorrect) {
@@ -143,7 +140,7 @@ router.post('/user/login',function(req,res){
                 jwt.sign(
                     payload,
                     process.env.JWT_SECRET,
-                    {expiresIn: 86400},
+                    {expiresIn: 7200},
                     (err, token) => {
                         console.log(err)
                         if(err) return res.json({msg:err})
