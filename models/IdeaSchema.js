@@ -7,7 +7,7 @@ const IdeaSchema = new Schema({
         type: String,
     },
     userId: {
-        type:Number,
+        type:String,
     },
     description: {
         type: String,
