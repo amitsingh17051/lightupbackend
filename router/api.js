@@ -13,9 +13,7 @@ const User = require('../models/userSchema');
 // Midleware function 
 
 function verifyJWTToken(req, res, next) {
-    const token = req.header['x-access-token']?.split(' ')[1];
-
-    console.log(token)
+    const token = req.headers['x-access-token']?.split(' ')[1];
     //console.log(req)
     if(token) {
         jwt.verify(token, process.env.JWT_SECRET, (err, decode) => {
