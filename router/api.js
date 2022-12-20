@@ -55,6 +55,7 @@ router.get('/idea/:id', async function(req, res){
 router.get('/idea/user/:id', async function(req, res){
     try {
         const userIdea = await Idea.find({ userId: {$eq:req.params.id} });
+         
         res.status(302).send({userIdea});
     } catch (error) {
         res.status(400).json({msg: "No Idea found for this user!"});
@@ -97,10 +98,11 @@ router.put('/idea/:id', async function(req, res){
 router.delete('/idea/:id', async function(req, res){
     try {
         await Idea.deleteOne({ _id: req.params.id })
+
     } catch (error) {
-        res.status(400).send({msg:"Id is not valid"})
+        res.status(400).send({status:false, msg:"Id is not valid"})
     }
-    res.status(200).send({msg:"idead Deleted Sucessfully!"})
+    res.status(200).send({status:true, msg:"idead Deleted Sucessfully!"})
 });
 
 
@@ -127,12 +129,15 @@ router.post('/user/login',function(req,res){
     .then(dbUser => {
         if(!dbUser) {
             return res.json({
+                status:false,
                 msg:"Invalid Username or Password 33"
             })
         }
-        bcrypt.compare(dbUser.password, userLoggingIn.password)
-        .then(isCorrect => {
-            if(!isCorrect) {
+
+        
+        bcrypt.compare(userLoggingIn.password, dbUser.password).then((isCorrect) => {
+            console.log(isCorrect);
+            if(isCorrect) {
                 const payload = {
                     id: dbUser._id,
                     name: dbUser.name
@@ -145,6 +150,7 @@ router.post('/user/login',function(req,res){
                         console.log(err)
                         if(err) return res.json({msg:err})
                         return res.json({
+                            status:true,
                             message:"Success",
                             token:"Bearer " + token
                         })
@@ -152,7 +158,8 @@ router.post('/user/login',function(req,res){
                 )
             } else {
                 return res.json({
-                    msg:"Invalid Username or Password 44"
+                    status:false,
+                    msg:"Invalid Username or Password"
                 })
             }
         }) 
