@@ -9,7 +9,7 @@ const port = process.env.PORT || "8000";
 
 const cors = require('cors');
 app.use(cors({
-  origin: 'http://127.0.0.1:5173'
+  origin: '*'
 }));
 
 mongoose.connect('mongodb+srv://root:root@cluster0.iagif.mongodb.net/?retryWrites=true&w=majority');
